@@ -13,13 +13,13 @@ class NotesRoutes {
 
   void register(Router router) {
     // GET /notes_app
-    router.get('/notes_app', _getAll);
+    router.get('/notes_app/', _getAll);
 
     // GET /notes_app/<id>
     router.get('/notes_app/<id>', _getById);
 
     // POST /notes_app
-    router.post('/notes_app', _create);
+    router.post('/notes_app/', _create);
 
     // PUT /notes_app/<id>
     router.put('/notes_app/<id>', _update);
