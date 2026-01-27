@@ -2,6 +2,7 @@ name: notes_app
 description: A sample command-line application.
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
+publish_to: none
 
 environment:
   sdk: ^3.10.7
@@ -13,6 +14,10 @@ dependencies:
   shelf_router: ^1.1.4
   shelf_cors_headers: ^0.1.5
   postgres: ^3.5.9
+  notes_repo_core:
+    git:
+      url: https://github.com/DanielWillforss/notes_repo_code.git
+      ref: main
 
 dev_dependencies:
   lints: ^6.0.0

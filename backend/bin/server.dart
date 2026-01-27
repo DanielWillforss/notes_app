@@ -1,5 +1,4 @@
-import 'package:notes_app/01_routing/notes_routes.dart';
-import 'package:notes_app/02_repositories/note_repository.dart';
+import 'package:notes_app/notes_routes.dart';
 import 'package:notes_app/database_connection.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as io;
@@ -11,7 +10,7 @@ Future<void> main() async {
   final router = Router();
 
   // Register route groups
-  NotesRoutes(NoteRepository(), conn).register(router);
+  NotesRoutes(conn).register(router);
 
   final handler = const Pipeline()
       .addMiddleware(logRequests())

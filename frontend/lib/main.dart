@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/pages/notes_page.dart';
+import 'package:notes_repo_widget/note_widget_package.dart';
 
 void main() {
+  //NotesApi.baseUrl = 'https://danielwillforss.site/notes_app';
+  NotesApi.baseUrl = 'http://127.0.0.1:5000/notes_app/';
   runApp(MyApp());
-}
-
-class GlobalConstants {
-  static const String baseUrl = 'https://danielwillforss.site/notes_app/';
 }
 
 class MyApp extends StatelessWidget {
@@ -43,7 +41,10 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.grey[200],
         ),
       ),
-      home: MainPage(),
+      home: Scaffold(
+        appBar: AppBar(title: Text('Notes')),
+        body: NotesPage(),
+      ),
 
       builder: (context, child) {
         return MediaQuery(
@@ -63,30 +64,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [NotesPage()];
-
-  final List<String> _titles = ['Notes'];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_titles[_selectedIndex])),
-      body: _pages[_selectedIndex],
-      //bottomNavigationBar: BottomNavigationBar(
-      //  currentIndex: _selectedIndex,
-      //  onTap: _onItemTapped,
-      //  items: const [
-      //    BottomNavigationBarItem(icon: Icon(Icons.note), label: 'Notes'),
-      //  ],
-      //),
+      appBar: AppBar(title: Text('Notes')),
+      body: NotesPage(),
     );
   }
 }

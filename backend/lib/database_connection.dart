@@ -8,7 +8,7 @@ class DatabaseConnection {
       Endpoint(
         host: 'localhost',
         port: 5432,
-        database: 'workapp_dev',
+        database: 'dev_db',
         username: 'admin',
         password: 'admin',
       ),
