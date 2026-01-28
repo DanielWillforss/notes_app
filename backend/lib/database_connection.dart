@@ -8,7 +8,7 @@ class DatabaseConnection {
       Endpoint(
         host: 'localhost',
         port: 5432,
-        database: 'dev_db',
+        database: 'notes_app',
         username: 'admin',
         password: 'admin',
       ),

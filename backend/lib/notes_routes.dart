@@ -7,26 +7,26 @@ class NotesRoutes {
   late final NotesRouting routing;
 
   NotesRoutes(Connection conn) {
-    routing = NotesRouting(conn, "notes");
+    routing = NotesRouting(conn, "content.notes");
   }
 
   void register(Router router) {
     //final routing = NotesRouting(conn, "content.notes");
 
     // GET /notes_app
-    router.get('/notes_app/', _getAll);
+    router.get('/', _getAll);
 
     // GET /notes_app/<id>
-    router.get('/notes_app/<id>/', _getById);
+    router.get('/<id>/', _getById);
 
     // POST /notes_app
-    router.post('/notes_app/', _create);
+    router.post('/', _create);
 
     // PUT /notes_app/<id>
-    router.put('/notes_app/<id>/', _update);
+    router.put('/<id>/', _update);
 
     // DELETE /notes_app/<id>
-    router.delete('/notes_app/<id>/', _delete);
+    router.delete('/<id>/', _delete);
   }
 
   /// returns all notes as a list of json with the keys "id", "title", "body", "created_at", "updated_at"
