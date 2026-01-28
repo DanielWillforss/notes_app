@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:notes_repo_widget/note_widget_package.dart';
 
 void main() {
-  //NotesApi.baseUrl = 'https://danielwillforss.site/notes_app';
-  NotesApi.baseUrl = 'http://127.0.0.1:5000/notes_app/';
+  NotesApi.baseUrl = 'https://danielwillforss.site/notes_app/';
+  //NotesApi.baseUrl = 'http://127.0.0.1:5000/notes_app/';
   runApp(MyApp());
 }
 
