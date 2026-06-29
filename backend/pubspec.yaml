@@ -14,9 +14,9 @@ dependencies:
   shelf_router: ^1.1.4
   shelf_cors_headers: ^0.1.5
   postgres: ^3.5.9
-  notes_repo_core:
+  app_core:
     git:
-      url: https://github.com/DanielWillforss/notes_repo_code.git
+      url: https://github.com/DanielWillforss/app_core.git
       ref: main
 
 dev_dependencies:

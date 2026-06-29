@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:notes_repo_widget/note_widget_package.dart';
+import 'package:notes_app/notes_api.dart';
+import 'package:notes_app/pages/notes_page.dart';
 
 void main() {
   NotesApi.baseUrl = 'https://danielwillforss.site/notes_app/';
