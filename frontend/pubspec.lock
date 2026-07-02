@@ -10,6 +10,15 @@ packages:
       url: "https://github.com/DanielWillforss/app_core.git"
     source: git
     version: "1.0.0"
+  app_core_widget:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: ce239829970034522e2bce1667b0f5c9ac3cf2c5
+      url: "https://github.com/DanielWillforss/app_core_widget.git"
+    source: git
+    version: "1.0.0"
   async:
     dependency: transitive
     description:

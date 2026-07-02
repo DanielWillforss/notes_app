@@ -1,17 +1,17 @@
+import 'package:app_core/database/database.dart';
 import 'package:app_core/models/note_model.dart';
 import 'package:app_core/util/exceptions.dart';
 import 'package:postgres/postgres.dart';
 
 class NoteRepository {
-  final Connection conn;
-  final String tablePath;
+  final Database db;
 
-  NoteRepository(this.conn, this.tablePath);
+  NoteRepository() : db = Database.instance;
 
   // Get all as List of Notes
   Future<List<Note>> findAll() async {
-    final result = await conn.execute(
-      Sql.named('SELECT * FROM $tablePath ORDER BY created_at DESC'),
+    final result = await db.execute(
+      Sql.named('SELECT * FROM general.notes ORDER BY created_at DESC'),
     );
 
     return [for (final row in result) Note.fromMap(row.toColumnMap())];
@@ -21,7 +21,7 @@ class NoteRepository {
   // throws IdNotFoundException for non-existant id
   Future<Note> findById(int id) async {
     return _oneOrThrow(
-      'SELECT * FROM $tablePath WHERE id = @id',
+      'SELECT * FROM general.notes WHERE id = @id',
       params: {'id': id},
       idForError: id,
     );
@@ -35,7 +35,7 @@ class NoteRepository {
   Future<Note> insert({String? title, String? body}) {
     return _oneOrThrow(
       '''
-    INSERT INTO $tablePath (title, body)
+    INSERT INTO general.notes (title, body)
     VALUES (@title, @body)
     RETURNING *
     ''',
@@ -71,7 +71,7 @@ class NoteRepository {
   // throws IdNotFoundException for non-existant id
   Future<void> delete(int id) async {
     await _oneOrThrow(
-      'DELETE FROM $tablePath WHERE id = @id RETURNING *',
+      'DELETE FROM general.notes WHERE id = @id RETURNING *',
       params: {'id': id},
       idForError: id,
     );
@@ -80,7 +80,7 @@ class NoteRepository {
   Future<Note> _update(int id, String setClause, Map<String, Object?> params) {
     return _oneOrThrow(
       '''
-    UPDATE $tablePath
+    UPDATE general.notes
     SET $setClause, updated_at = clock_timestamp()
     WHERE id = @id
     RETURNING *
@@ -95,7 +95,7 @@ class NoteRepository {
     required Map<String, Object?> params,
     int? idForError,
   }) async {
-    final result = await conn.execute(Sql.named(sql), parameters: params);
+    final result = await db.execute(Sql.named(sql), parameters: params);
 
     if (result.isEmpty && idForError != null) {
       throw IdNotFoundException(idForError);

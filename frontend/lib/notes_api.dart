@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:app_core/models/note_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:notes_app/main.dart';
 
 class NotesApi {
-  static late final String baseUrl;
+  static const String baseUrl = GlobalConstants.baseUrl;
   static late Future<List<Note>> notesFuture;
 
   static Future<List<Note>> getNotes() {
@@ -14,7 +15,7 @@ class NotesApi {
 
   /// GET /notes
   static Future<List<Note>> _getNotes() async {
-    final response = await http.get(Uri.parse('$baseUrl'));
+    final response = await http.get(Uri.parse('$baseUrl/'));
 
     if (response.statusCode != 200) {
       throw Exception('Failed to load notes');
@@ -27,7 +28,7 @@ class NotesApi {
   /// POST /notes
   static Future<List<Note>> createNote(String title) async {
     final response = await http.post(
-      Uri.parse('$baseUrl'),
+      Uri.parse('$baseUrl/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'title': title}),
     );
@@ -47,7 +48,7 @@ class NotesApi {
   /// PUT /notes/{id}/title/
   static Future<List<Note>> _updateTitle(int id, String title) async {
     final response = await http.put(
-      Uri.parse('$baseUrl$id/title/'),
+      Uri.parse('$baseUrl/$id/title/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'title': title}),
     );
@@ -63,7 +64,7 @@ class NotesApi {
   /// PUT /notes/{id}/body/
   static Future<List<Note>> updateBody(int id, String body) async {
     final response = await http.put(
-      Uri.parse('$baseUrl$id/body/'),
+      Uri.parse('$baseUrl/$id/body/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'body': body}),
     );
@@ -83,7 +84,7 @@ class NotesApi {
   /// PUT /notes/{id}/parent/
   static Future<List<Note>> _updateParentId(int id, int? parentId) async {
     final response = await http.put(
-      Uri.parse('$baseUrl$id/parent/'),
+      Uri.parse('$baseUrl/$id/parent/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'parentId': parentId}),
     );
@@ -102,7 +103,7 @@ class NotesApi {
 
   /// DELETE /notes/{id}
   static Future<List<Note>> _deleteNote(int id) async {
-    final response = await http.delete(Uri.parse('$baseUrl$id/'));
+    final response = await http.delete(Uri.parse('$baseUrl/$id/'));
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete note');

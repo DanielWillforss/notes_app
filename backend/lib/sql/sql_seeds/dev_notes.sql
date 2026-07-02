@@ -1,5 +1,5 @@
 -- Insert dummy data
-INSERT INTO notes (parent_id, title, body)
+INSERT INTO general.notes (parent_id, title, body)
 VALUES
 (NULL, 'Seed note', 'Hello from seed'),
 (

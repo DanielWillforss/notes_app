@@ -1,45 +1,36 @@
 import 'package:app_core/util/exceptions.dart';
 import 'package:app_core/util/general_util.dart';
 import 'note_repository.dart';
-import 'package:postgres/postgres.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 class NotesRouting {
   late NoteRepository notesRepo;
 
-  NotesRouting(Connection conn, String tablePath) {
-    notesRepo = NoteRepository(conn, tablePath);
+  NotesRouting() {
+    notesRepo = NoteRepository();
   }
 
-  static String _normalizeBasePath(String path) {
-    if (path.isEmpty) return '';
-    if (!path.startsWith('/')) path = '/$path';
-    return path.endsWith('/') ? path.substring(0, path.length - 1) : path;
-  }
-
-  void register(Router router, {String basepath = ''}) {
-    final notesRouter = Router();
+  void register(Router router) {
 
     // GET /notes/
-    notesRouter.get('/', getAll);
+    router.get('/', getAll);
 
     // POST /notes/
-    notesRouter.post('/', create);
+    router.post('/', create);
 
     // PUT /notes/<id>/title/
-    notesRouter.put('/<id>/title/', updateTitle);
+    router.put('/<id>/title/', updateTitle);
 
     // PUT /notes/<id>/body/
-    notesRouter.put('/<id>/body/', updateContent);
+    router.put('/<id>/body/', updateContent);
 
     // PUT /notes/<id>/parent/
-    notesRouter.put('/<id>/parent/', updateParentId);
+    router.put('/<id>/parent/', updateParentId);
 
     // DELETE /notes/<id>/
-    notesRouter.delete('/<id>/', delete);
+    router.delete('/<id>/', delete);
 
-    router.mount('${_normalizeBasePath(basepath)}/notes', notesRouter.call);
   }
 
   /// returns all notes as a list of json with the keys "id", "title", "body", "parent_id", "created_at", "updated_at"

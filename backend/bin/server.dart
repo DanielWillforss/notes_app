@@ -1,4 +1,4 @@
-
+import 'package:app_core/app_core.dart';
 import 'package:notes_app/note_routing.dart';
 import 'package:postgres/postgres.dart';
 import 'package:shelf/shelf.dart';
@@ -7,10 +7,19 @@ import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_cors_headers/shelf_cors_headers.dart';
 
 Future<void> main() async {
-  final conn = await DatabaseConnection.get();
-  final router = Router();
-  final routing = NotesRouting(conn, "notes");
+  Database.init(
+    Endpoint(
+      host: 'localhost',
+      port: 5432,
+      database: 'dev_db',
+      username: 'admin',
+      password: 'admin',
+    ),
+  );
 
+  final routing = NotesRouting();
+
+  final router = Router();
   routing.register(router);
 
   final handler = const Pipeline()

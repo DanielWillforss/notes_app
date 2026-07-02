@@ -2,7 +2,6 @@ import 'package:app_core/models/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_app/notes_api.dart';
 import '../bubble_controller/bubble_controller.dart';
-import '../notes_base.dart';
 
 class BubblePage extends StatefulWidget {
   const BubblePage({super.key});
@@ -57,30 +56,45 @@ class _BubblePageState extends State<BubblePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Notes')),
       floatingActionButton: FloatingActionButton(
         heroTag: 'bubblePage',
         onPressed: () => _showDialogWindow(),
         child: const Icon(Icons.add),
       ),
-      body: NotesBase.getFutureBuilder(
+      body: FutureBuilder(
         future: _notesFuture,
-        builder: (notes) => InteractiveViewer(
-          constrained: false,
-          transformationController: _viewController,
-          minScale: BubblePage._minScale,
-          maxScale: BubblePage._maxScale,
-          boundaryMargin: const EdgeInsets.all(0),
-          child: SizedBox(
-            width: BubblePage._canvasSize,
-            height: BubblePage._canvasSize,
-            child: Stack(
-              children: [
-                Container(color: Colors.grey),
-                ..._bubbleController.buildBubbles(notes),
-              ],
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final notes = snapshot.data ?? [];
+          if (notes.isEmpty) {
+            return const Center(child: Text('No notes yet'));
+          }
+
+          return InteractiveViewer(
+            constrained: false,
+            transformationController: _viewController,
+            minScale: BubblePage._minScale,
+            maxScale: BubblePage._maxScale,
+            boundaryMargin: const EdgeInsets.all(0),
+            child: SizedBox(
+              width: BubblePage._canvasSize,
+              height: BubblePage._canvasSize,
+              child: Stack(
+                children: [
+                  Container(color: Colors.grey),
+                  ..._bubbleController.buildBubbles(notes),
+                ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

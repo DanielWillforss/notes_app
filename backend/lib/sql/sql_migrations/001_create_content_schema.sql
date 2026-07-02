@@ -1,7 +1,9 @@
 -- Create notes table
-DROP TABLE IF EXISTS notes;
+--DROP TABLE IF EXISTS notes;
 
-CREATE TABLE notes (
+CREATE SCHEMA general;
+
+CREATE TABLE general.notes (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     parent_id INTEGER,
     title TEXT NOT NULL,

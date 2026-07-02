@@ -1,6 +1,5 @@
 import 'package:app_core/models/note_model.dart';
 import 'package:flutter/material.dart';
-import '../notes_base.dart';
 import 'note_detail_page.dart';
 
 import '../notes_api.dart';
@@ -28,37 +27,52 @@ class _NotesPageState extends State<NotesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Notes')),
       floatingActionButton: FloatingActionButton(
         heroTag: 'notesPage',
         onPressed: () => _showDialogWindow(null),
         child: const Icon(Icons.add),
       ),
-      body: NotesBase.getFutureBuilder(
+      body: FutureBuilder(
         future: _notesFuture,
-        builder: (notes) => ListView.builder(
-          itemCount: notes.length,
-          itemBuilder: (context, index) {
-            final note = notes[index];
-            return ListTile(
-              title: Text(note.title),
-              subtitle: Text(
-                note.body,
-                maxLines: 2, // show only 2 lines
-                overflow: TextOverflow.ellipsis, // add "..." if too long
-              ),
-              onTap: () async {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NoteDetailPage(note: note),
-                  ),
-                );
-                setState(_loadNotes);
-              },
-              onLongPress: () => _showDialogWindow(note),
-            );
-          },
-        ),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          final notes = snapshot.data ?? [];
+          if (notes.isEmpty) {
+            return const Center(child: Text('No notes yet'));
+          }
+
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              final note = notes[index];
+              return ListTile(
+                title: Text(note.title),
+                subtitle: Text(
+                  note.body,
+                  maxLines: 2, // show only 2 lines
+                  overflow: TextOverflow.ellipsis, // add "..." if too long
+                ),
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoteDetailPage(note: note),
+                    ),
+                  );
+                  setState(_loadNotes);
+                },
+                onLongPress: () => _showDialogWindow(note),
+              );
+            },
+          );
+        },
       ),
     );
   }
