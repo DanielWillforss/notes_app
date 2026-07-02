@@ -11,7 +11,7 @@ class NoteRepository {
   // Get all as List of Notes
   Future<List<Note>> findAll() async {
     final result = await db.execute(
-      Sql.named('SELECT * FROM general.notes ORDER BY created_at DESC'),
+      Sql.named('SELECT * FROM content.notes ORDER BY created_at DESC'),
     );
 
     return [for (final row in result) Note.fromMap(row.toColumnMap())];
@@ -21,7 +21,7 @@ class NoteRepository {
   // throws IdNotFoundException for non-existant id
   Future<Note> findById(int id) async {
     return _oneOrThrow(
-      'SELECT * FROM general.notes WHERE id = @id',
+      'SELECT * FROM content.notes WHERE id = @id',
       params: {'id': id},
       idForError: id,
     );
@@ -35,7 +35,7 @@ class NoteRepository {
   Future<Note> insert({String? title, String? body}) {
     return _oneOrThrow(
       '''
-    INSERT INTO general.notes (title, body)
+    INSERT INTO content.notes (title, body)
     VALUES (@title, @body)
     RETURNING *
     ''',
@@ -71,7 +71,7 @@ class NoteRepository {
   // throws IdNotFoundException for non-existant id
   Future<void> delete(int id) async {
     await _oneOrThrow(
-      'DELETE FROM general.notes WHERE id = @id RETURNING *',
+      'DELETE FROM content.notes WHERE id = @id RETURNING *',
       params: {'id': id},
       idForError: id,
     );
@@ -80,7 +80,7 @@ class NoteRepository {
   Future<Note> _update(int id, String setClause, Map<String, Object?> params) {
     return _oneOrThrow(
       '''
-    UPDATE general.notes
+    UPDATE content.notes
     SET $setClause, updated_at = clock_timestamp()
     WHERE id = @id
     RETURNING *
